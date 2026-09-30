@@ -16,7 +16,7 @@ __version__ = '0.1.0'
 
 @overload
 def coverage_simplify(
-    geometries: Geometry,
+    geometry: Geometry,
     tolerance: npt.ArrayLike,
     *,
     simplify_boundary: bool = True,
@@ -26,7 +26,7 @@ def coverage_simplify(
 
 @overload
 def coverage_simplify(
-    geometries: npt.ArrayLike,
+    geometry: npt.ArrayLike,
     tolerance: npt.ArrayLike,
     *,
     simplify_boundary: bool = True,
@@ -35,7 +35,7 @@ def coverage_simplify(
 
 
 def coverage_simplify(
-    geometries: Geometry | npt.ArrayLike,
+    geometry: Geometry | npt.ArrayLike,
     tolerance: npt.ArrayLike,
     *,
     simplify_boundary: bool = True,
@@ -57,8 +57,8 @@ def coverage_simplify(
         threads = operator.index(threads)
         if threads <= 0:
             raise ValueError('threads must be positive')
-    scalar = isinstance(geometries, Geometry)
-    array = np.asarray(geometries)
+    scalar = isinstance(geometry, Geometry)
+    array = np.asarray(geometry)
     # Shapely temporarily toggles writeability during ufunc calls. Own this
     # pointer array so simultaneous calls cannot mutate each other's flags.
     flat = array.flatten()

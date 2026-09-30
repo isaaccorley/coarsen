@@ -1,9 +1,12 @@
 //! Pure Rust GEOS 3.13.1 coverage simplification. No native geometry libraries.
 pub mod edges;
 pub mod geom;
+mod line_math;
 mod predicates;
 #[cfg(feature = "python")]
 mod python;
+pub mod simple_geom;
+pub mod topology;
 pub mod tpvw;
 pub mod validate;
 pub mod wkb;

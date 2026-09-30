@@ -70,3 +70,24 @@ no Python objects, GEOS calls, or shared mutable global geometry state. Explicit
 thread counts are local to a call; the default Rayon pool obeys `RAYON_NUM_THREADS`.
 The wrapper restores precision-grid metadata lost in the WKB round trip using
 Shapely's pointwise precision mode.
+
+# Unreleased general simplifier
+
+The private `coarsen._simplify.simplify` prototype supports only
+`preserve_topology=True`. Its tagged-line port uses immutable packed input
+envelopes plus live-segment masks and an output R-tree. Index traversal order
+does not choose vertices: queries are boolean intersection checks. Line traversal,
+furthest-point ties, minimum-size decisions, and ring endpoint handling follow
+GEOS 3.13.1. Points, collections, empty members, and coordinate dimensions follow
+its GeometryTransformer. WKB loses LinearRing identity, so ring paths are carried
+separately and restored by the Python transport.
+
+The proposed 0.2.0 release is incomplete. DouglasPeuckerSimplifier's
+`createValidArea` calls `isValid()` and, for invalid or non-area results,
+`buffer(0)`. Neither engine exists in this Rust core. For example, at tolerance
+zero and `preserve_topology=False`, GEOS transforms
+`POLYGON ((0 0, 2 2, 0 2, 2 0, 0 0))` into
+`POLYGON ((0 0, 1 1, 2 0, 0 0))`. Vertex removal alone cannot produce this result.
+A complete pure-Rust release needs the corresponding GEOS validity and zero-buffer
+semantics; a Shapely repair stage would instead change the pure-Rust guarantee
+and requires an explicit architecture decision. No repair fallback is enabled.

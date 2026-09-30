@@ -5,6 +5,12 @@ Copyright (C) 2014 Mateusz Loskot (CGAlgorithmsDD).
 Copyright (C) 2020 Crunchy Data (double-double arithmetic).
 Rust port and parallel scheduling modifications, 2026 Isaac Corley.
 
+General geometry simplification prototype derived from GEOS 3.13.1:
+Copyright (C) 2006 Refractions Research Inc.
+Copyright (C) 2011 Sandro Santilli.
+Copyright (C) 2018, 2023 Paul Ramsey.
+Copyright (C) 2023 Martin Davis.
+
 This package is LGPL-2.1-or-later. See LICENSE. GEOS source files:
   src/coverage/CoverageSimplifier.cpp
   src/coverage/CoverageRingEdges.cpp
@@ -24,6 +30,16 @@ This package is LGPL-2.1-or-later. See LICENSE. GEOS source files:
   src/algorithm/PolygonNodeTopology.cpp
   src/geom/Triangle.cpp
   src/simplify/LinkedLine.cpp
+  src/simplify/TopologyPreservingSimplifier.cpp
+  src/simplify/TaggedLinesSimplifier.cpp
+  src/simplify/TaggedLineStringSimplifier.cpp
+  src/simplify/TaggedLineString.cpp
+  src/simplify/LineSegmentIndex.cpp
+  src/simplify/ComponentJumpChecker.cpp
+  src/geom/util/GeometryTransformer.cpp
+  src/algorithm/Distance.cpp
+  src/algorithm/RayCrossingCounter.cpp
+  include/geos/algorithm/LineIntersector.h
 Fixture cases also derive from:
   tests/unit/coverage/CoverageSimplifierTest.cpp
   tests/unit/coverage/CoveragePolygonValidatorTest.cpp

@@ -59,3 +59,24 @@ wrapper has 100% statement coverage. Four Cargo tests pass, including the 174
 original cases and three real UTM fixtures; rustfmt, Clippy, Ruff, ty, and actionlint
 pass. Wheel and sdist installations were tested in fresh environments. macOS and
 Windows execution remains for the configured GitHub Actions matrix.
+
+## Unreleased topology prototype
+
+`benchmark_topology.py` measures the private `coarsen._simplify.simplify` prototype
+against Shapely on complete tiles `34UEU_0_0` and `22JBM_0_0`, at 1.2 m and 5 m,
+with one and eight threads. It checks every WKB on all three repetitions and
+prints timings and hashes as JSON lines. Only `preserve_topology=True` exists;
+the public `coarsen.simplify` API and the non-topology mode remain incomplete.
+
+Run against an installed development wheel, with pyarrow and pyproj installed:
+
+```sh
+sbatch --account=bgtj-tgirails --partition=cpu,cpu_amd \
+  --exclude='rails[04-15]' -c 8 --mem=32G --time=1:00:00 \
+  --output=benchmarks/topology-%j.out \
+  --wrap='OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 .venv-benchmark/bin/python benchmarks/benchmark_topology.py'
+```
+
+No topology timings are reported yet. Job `228064`, submitted on 2026-09-30,
+remained pending with a start estimate of 2026-10-01 15:09 and was cancelled.
+The coverage timings above are from the original implementation, not this prototype.

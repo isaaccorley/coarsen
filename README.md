@@ -16,7 +16,7 @@ polygons = [shapely.box(0, 0, 10, 10), shapely.box(10, 0, 20, 10)]
 result = coarsen.coverage_simplify(polygons, 5.0, threads=8)
 ```
 
-`coverage_simplify(geometries, tolerance, *, simplify_boundary=True, threads=None)`
+`coverage_simplify(geometry, tolerance, *, simplify_boundary=True, threads=None)`
 returns a NumPy object array with the input shape; scalar geometry input returns
 a scalar geometry, matching Shapely. `simplify_boundary=False` implements GEOS
 `simplifyInner`. `threads=None` uses Rayon's default pool; a positive integer
@@ -33,6 +33,12 @@ results. Parity is verified on these cases, not a proof for every floating-point
 input. Nonfinite XY coordinates are rejected. Invalid coverages are not repaired.
 The Rust library retains coverage validation; no Python invalid-edges helper is
 exposed because the port computes an invalid-polygon mask rather than edge geometry.
+
+The requested 0.2.0 general `simplify` API is still under development and is not
+exported. A private topology-preserving prototype and parity tests are present;
+Douglas–Peucker polygon validity checking and buffer(0) repair are not implemented.
+See the [implementation status](CONTRIBUTING.md#unreleased-general-simplifier).
+The package version remains 0.1.0; it is not yet a drop-in for `shapely.simplify`.
 
 | Tile | Polygons | Shapely (s) | coarsen 1 thread (s) | coarsen 8 threads (s) | Speedup (8) |
 | --- | ---: | ---: | ---: | ---: | ---: |
