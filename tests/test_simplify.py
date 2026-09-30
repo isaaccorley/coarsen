@@ -11,7 +11,7 @@ from shapely import GeometryCollection, LinearRing, LineString, MultiPolygon, Po
 from shapely.affinity import translate
 
 import coarsen
-from coarsen._simplify import simplify
+from coarsen import simplify
 
 
 def corpus():
@@ -190,6 +190,8 @@ def test_large_finite_coordinates():
     parity(LineString([(0, 0), (1e200, 1), (2, 2)]), 1)
 
 
-def test_unimplemented_mode_is_explicit():
-    with pytest.raises(NotImplementedError, match='polygon repair'):
-        simplify(CORPUS[0], 1, preserve_topology=False)
+@pytest.mark.parametrize('tolerance', [0, 0.5, 2.0])
+def test_douglas_peucker_matches_shapely(tolerance):
+    expected = shapely.simplify(CORPUS, tolerance, preserve_topology=False)
+    actual = simplify(CORPUS, tolerance, preserve_topology=False)
+    assert np.array_equal(shapely.to_wkb(expected), shapely.to_wkb(actual))

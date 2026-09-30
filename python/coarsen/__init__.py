@@ -1,4 +1,4 @@
-"""Parallel polygon coverage simplification, following GEOS 3.13.1."""
+"""Drop-in, parallel replacements for shapely.coverage_simplify and shapely.simplify."""
 
 import operator
 from typing import overload
@@ -9,9 +9,10 @@ import shapely
 from shapely import Geometry
 
 from ._core import simplify_wkb
+from ._simplify import simplify
 
-__all__ = ['coverage_simplify']
-__version__ = '0.1.0'
+__all__ = ['coverage_simplify', 'simplify']
+__version__ = '0.2.0'
 
 
 @overload

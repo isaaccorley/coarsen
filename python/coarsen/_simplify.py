@@ -44,7 +44,11 @@ def simplify(
     threads: int | None = None,
     **kwargs,
 ) -> Geometry | npt.NDArray[np.object_] | None:
-    """Simplify using GEOS 3.13.1 vertex choices, in Rust across geometries.
+    """Drop-in for ``shapely.simplify``, byte-identical to GEOS 3.13.1.
+
+    ``preserve_topology=True`` (the default) runs GEOS's TopologyPreservingSimplifier,
+    ported to Rust and parallel across geometries. ``preserve_topology=False`` calls
+    ``shapely.simplify``, since GEOS repairs Douglas-Peucker polygons with buffer(0).
 
     Geometry and tolerance broadcast together. Scalars return scalar geometries;
     None and NaN tolerances produce None. Supports ufunc ``out`` and ``where``;
@@ -57,9 +61,9 @@ def simplify(
         threads = operator.index(threads)
         if threads <= 0:
             raise ValueError('threads must be positive')
-    mode = bool(preserve_topology)
-    if not mode:
-        raise NotImplementedError('Douglas-Peucker polygon repair is not yet implemented')
+    if not preserve_topology:
+        # GEOS repairs Douglas-Peucker polygons with buffer(0); defer to it for exact output.
+        return shapely.simplify(geometry, tolerance, preserve_topology=False, **kwargs)
     array = np.asarray(geometry, dtype=object)
     tolerances = np.asarray(tolerance)
     if not np.can_cast(tolerances.dtype, np.float64, casting='safe'):
