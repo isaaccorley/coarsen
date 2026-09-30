@@ -1,0 +1,13 @@
+{
+  "job_id": 226934,
+  "rustc": "rustc 1.96.1 (31fca3adb 2026-06-26)",
+  "dependencies": {
+    "numpy": "2.5.3",
+    "shapely": "2.1.2",
+    "pyproj": "3.8.0",
+    "pyarrow": "25.0.1"
+  },
+  "extension_sha256": "de524cc8e3aed306dca1b2192174da595245a328d486323a5d31447ae6f002b6",
+  "wrapper_sha256": "341ab593f14a2c2a25caf49ee5c2ed4de63b1405556177d9df359e22759e3c36",
+  "note": "Frozen installed wheel; final wrapper additionally owns a copy of the input pointer array for concurrent-call safety. Rust extension unchanged."
+}

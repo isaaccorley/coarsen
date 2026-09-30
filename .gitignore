@@ -1,0 +1,11 @@
+.venv*/
+target/
+__pycache__/
+*.so
+*.pyd
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+benchmarks/*.out
