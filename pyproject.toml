@@ -34,8 +34,8 @@ Changelog = "https://github.com/isaaccorley/coarsen/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
 docs = ["zensical>=0.0.67,<0.1"]
-test = ["pytest>=8", "pytest-cov", "shapely==2.1.2"]
-dev = ["maturin>=1.15,<2", "ruff", "ty", "pytest>=8", "pytest-cov", "shapely==2.1.2"]
+test = ["pytest>=9.1.1", "pytest-cov", "shapely==2.1.2"]
+dev = ["maturin>=1.15,<2", "ruff", "ty", "pytest>=9.1.1", "pytest-cov", "shapely==2.1.2"]
 benchmark = ["pyarrow", "pyproj"]
 
 [tool.maturin]
