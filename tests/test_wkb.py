@@ -46,3 +46,33 @@ def test_nonfinite_xy_rejected():
         geometry = shapely.from_wkt('POLYGON ((0 0,1 0,NaN 1,0 1,0 0))')
     with pytest.raises(ValueError, match='nonfinite XY'):
         simplify_wkb([shapely.to_wkb(geometry)], 1, True, 1)
+
+
+def test_topology_rejects_malformed_geometry_structure():
+    import struct
+
+    from coarsen._core import topology_wkb
+
+    short_line = struct.pack('<BII2d', 1, 2, 1, 0, 0)
+    normal_line = shapely.to_wkb(shapely.LineString([(0, 0), (1, 0.1), (2, 0)]))
+    collection = struct.pack('<BII', 1, 7, 2) + normal_line + short_line
+    wrong_child = struct.pack('<BII', 1, 4, 1) + normal_line
+    short_ring = struct.pack('<BIII2d', 1, 3, 1, 1, 0, 0)
+    unclosed_ring = struct.pack('<BIII6d', 1, 3, 1, 3, 0, 0, 1, 0, 1, 1)
+    for encoded in [short_line, collection, wrong_child, short_ring, unclosed_ring]:
+        with pytest.raises(ValueError):
+            topology_wkb([encoded], [1], [[]], 1)
+
+
+def test_topology_bounds_and_nesting():
+    import struct
+
+    from coarsen._core import topology_wkb
+
+    encoded = shapely.to_wkb(shapely.LineString([(0, 0), (1, 1)]))
+    for bad in [encoded[:i] for i in range(len(encoded))] + [encoded + b'\x00']:
+        with pytest.raises(ValueError):
+            topology_wkb([bad], [1], [[]], 1)
+    nested = struct.pack('<BII', 1, 7, 1) * 256 + encoded
+    with pytest.raises(ValueError, match='nesting'):
+        topology_wkb([nested], [1], [[]], 1)

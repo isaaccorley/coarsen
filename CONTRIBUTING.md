@@ -11,7 +11,7 @@ Use Rust ≥1.85 and Python ≥3.10. From the repository root:
 
 ```sh
 uv venv --python 3.13
-uv pip install maturin '.[dev,benchmark]'
+uv pip install maturin '.[dev,benchmark,docs]'
 uv run --no-sync maturin develop --release
 cargo fmt --check
 cargo clippy --locked --all-targets --all-features -- -D warnings
@@ -20,6 +20,7 @@ uv run --no-sync ruff check .
 uv run --no-sync ruff format --check .
 uv run --no-sync ty check
 uv run --no-sync pytest --cov=coarsen tests/
+uv run --no-sync zensical build --strict
 ```
 
 If a Conda environment is active, deactivate it before `maturin develop`.
@@ -48,7 +49,7 @@ macOS x86_64/arm64, and Windows x86_64, plus an sdist. All wheel targets except
 musllinux are tested in their build jobs; the sdist is built and tested separately.
 `workflow_dispatch` builds artifacts without publishing. Only `v*` tags publish.
 
-Before the first release, the owner must create the GitHub repository and a
+Before publishing, the owner must configure a
 PyPI project/pending trusted publisher for `coarsen`, specifying that repository,
 workflow `release.yml`, and environment `pypi`. Create the matching GitHub
 `pypi` environment and any desired approval rules. No API token or secret is needed.
@@ -87,3 +88,15 @@ identity, so ring paths are carried separately and restored by the Python transp
 zero GEOS transforms `POLYGON ((0 0, 2 2, 0 2, 2 0, 0 0))` into
 `POLYGON ((0 0, 1 1, 2 0, 0 0))`, which vertex removal alone cannot produce. A
 native Douglas-Peucker mode would need those GEOS validity and zero-buffer semantics.
+
+# Documentation and security
+
+`make docs-serve` previews the minimal Zensical site; `make docs` builds it strictly.
+GitHub Pages needs Actions enabled as its source before the first docs deployment.
+The configured canonical URL is `https://isaac.earth/coarsen/`.
+See [SECURITY.md](SECURITY.md) for private reporting and resource boundaries.
+
+Release builds disable debug-info stripping to avoid `mis-aligned LINKEDIT string pool`
+imports with affected Rust/macOS 27 toolchains
+([upstream issue](https://github.com/rust-lang/rust/issues/157750)).
+Do not add maturin `--strip` without verifying the resulting wheel on macOS.

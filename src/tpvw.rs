@@ -75,6 +75,23 @@ pub fn simplify_selected(edges: &[Edge], tolerance: f64, boundary: bool) -> (Vec
         .par_iter()
         .map(|e| (boundary || e.ring_count == 2) && can_change(e, tolerance * tolerance))
         .collect();
+    // No removals means no spatial constraints or dependency rounds are needed.
+    // Retain the same duplicate and ring-closure handling as the indexed path.
+    if !active.iter().any(|&value| value) {
+        let rings = edges
+            .par_iter()
+            .map(|e| {
+                let ring = is_ring(e);
+                let mut points = e.points[..e.points.len() - usize::from(ring)].to_vec();
+                points.dedup();
+                if ring && !points.is_empty() {
+                    points.push(points[0]);
+                }
+                points
+            })
+            .collect();
+        return (rings, 0);
+    }
     let index: Vec<_> = edges
         .par_iter()
         .map(|e| {

@@ -160,6 +160,7 @@ impl Reader<'_> {
             }
             2 => {
                 let n = self.count(stride)?;
+                ensure!(n != 1, "line must be empty or contain at least two points");
                 g.points = self.coords(dims, n)?;
             }
             3 => {
@@ -167,12 +168,21 @@ impl Reader<'_> {
                     let n = self.count(stride)?;
                     let mut ring = Shape::empty(RING, dims);
                     ring.points = self.coords(dims, n)?;
+                    ensure!(
+                        n == 0 || (n >= 3 && ring.points.first() == ring.points.last()),
+                        "unclosed or short ring"
+                    );
                     g.parts.push(ring);
                 }
             }
             _ => {
                 for _ in 0..self.count(5)? {
-                    g.parts.push(self.shape(depth + 1)?);
+                    let child = self.shape(depth + 1)?;
+                    ensure!(
+                        kind == 7 || child.kind == kind - 3,
+                        "invalid child type in WKB multi-geometry"
+                    );
+                    g.parts.push(child);
                 }
             }
         }

@@ -1,0 +1,4 @@
+Generated with the built-in imagegen tool on 2026-10-01, transparent background.
+
+Prompt:
+Use case: logo-brand. Create a professional minimal logo for an open-source geospatial geometry simplification package named coarsen. A compact coral polygon island with a charcoal outline, transitioning from several fine irregular vertices on one side to a few clean angular edges on the other, showing simplification while retaining shape. Flat graphic, elegant and restrained, no gradients, no shadows, no 3D, no decoration. Include lowercase wordmark exactly "coarsen" in clean distinctive geometric lettering to the right of the mark. Wide horizontal composition, comfortably padded, crisp legible at README size. Transparent background.

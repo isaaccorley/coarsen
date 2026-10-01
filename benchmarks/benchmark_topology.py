@@ -1,7 +1,4 @@
-"""Measure the private topology-preserving prototype on complete projected tiles.
-
-This is not a benchmark of a released public coarsen.simplify API.
-"""
+"""Measure public topology-preserving simplification on complete projected tiles."""
 
 import gc
 import hashlib
@@ -15,7 +12,7 @@ import pyarrow.parquet as pq
 import shapely
 from pyproj import Transformer
 
-from coarsen._simplify import simplify
+from coarsen import simplify
 
 
 def main() -> None:

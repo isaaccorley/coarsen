@@ -12,7 +12,7 @@ from ._core import simplify_wkb
 from ._simplify import simplify
 
 __all__ = ['coverage_simplify', 'simplify']
-__version__ = '0.2.0'
+__version__ = '0.3.0'
 
 
 @overload

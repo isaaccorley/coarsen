@@ -1,0 +1,35 @@
+site_name: coarsen
+site_url: https://isaac.earth/coarsen/
+site_description: Parallel geometry and polygon coverage simplification for Shapely, powered by Rust. Preserve shared boundaries and reduce vertices with coarsen.
+site_author: Isaac Corley
+repo_url: https://github.com/isaaccorley/coarsen
+repo_name: isaaccorley/coarsen
+theme:
+  name: material
+  custom_dir: docs/overrides
+  logo: assets/favicon.svg
+  favicon: assets/favicon.svg
+  font:
+    text: Manrope
+    code: JetBrains Mono
+  palette:
+    scheme: default
+    primary: custom
+    accent: custom
+  features:
+    - content.code.copy
+    - navigation.footer
+    - search.highlight
+extra_css:
+  - stylesheets/extra.css
+markdown_extensions:
+  - admonition
+  - pymdownx.superfences
+  - tables
+  - toc:
+      permalink: true
+nav:
+  - Overview: index.md
+  - API: api.md
+  - Performance: performance.md
+  - Development: development.md

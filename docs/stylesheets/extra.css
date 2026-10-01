@@ -1,0 +1,11 @@
+:root {
+  --md-primary-fg-color: #343936;
+  --md-accent-fg-color: #c75643;
+  --md-accent-fg-color--transparent: #e778631a;
+  --md-default-bg-color: #fbf9f4;
+  --md-typeset-a-color: #a83e30;
+}
+.md-header { border-bottom: 3px solid #e77863; }
+.md-typeset h1, .md-typeset h2 { font-weight: 750; color: #343936; }
+.md-typeset .brand { max-width: 520px; width: 100%; }
+.md-main { background: radial-gradient(ellipse at top right, #f2e8d955, transparent 60%); }

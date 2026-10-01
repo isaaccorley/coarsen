@@ -4,8 +4,9 @@ build-backend = "maturin"
 
 [project]
 name = "coarsen"
-version = "0.2.0"
-description = "Parallel polygon coverage simplification in Rust"
+version = "0.3.0"
+description = "Parallel, topology-preserving geometry and polygon coverage simplification for Shapely"
+keywords = ["geospatial", "gis", "polygon", "simplification", "shapely", "topology", "rust"]
 readme = "README.md"
 requires-python = ">=3.10"
 license = "LGPL-2.1-or-later"
@@ -24,7 +25,15 @@ classifiers = [
   "Topic :: Scientific/Engineering :: GIS",
 ]
 
+[project.urls]
+Homepage = "https://github.com/isaaccorley/coarsen"
+Documentation = "https://isaac.earth/coarsen/"
+Repository = "https://github.com/isaaccorley/coarsen"
+Issues = "https://github.com/isaaccorley/coarsen/issues"
+Changelog = "https://github.com/isaaccorley/coarsen/blob/main/CHANGELOG.md"
+
 [project.optional-dependencies]
+docs = ["zensical>=0.0.67,<0.1"]
 test = ["pytest>=8", "pytest-cov", "shapely==2.1.2"]
 dev = ["maturin>=1.15,<2", "ruff", "ty", "pytest>=8", "pytest-cov", "shapely==2.1.2"]
 benchmark = ["pyarrow", "pyproj"]

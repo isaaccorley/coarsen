@@ -1,70 +1,98 @@
 # coarsen
 
-Fast, multithreaded drop-ins for `shapely.coverage_simplify` and `shapely.simplify`,
-with byte-identical output to GEOS 3.13.1. Pure Rust ports of GEOS's
-CoverageSimplifier and TopologyPreservingSimplifier behind a thin Shapely wrapper.
-The Rust core links neither GEOS nor PROJ and performs no dynamic library loading.
+<img src="https://raw.githubusercontent.com/isaaccorley/coarsen/main/docs/assets/logo.png" alt="coarsen — detailed polygon boundaries reduced to clean edges" width="600">
+
+[![CI](https://github.com/isaaccorley/coarsen/actions/workflows/ci.yml/badge.svg)](https://github.com/isaaccorley/coarsen/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/coarsen)](https://pypi.org/project/coarsen/)
+[![Python](https://img.shields.io/pypi/pyversions/coarsen)](https://pypi.org/project/coarsen/)
+[![License: LGPL-2.1-or-later](https://img.shields.io/badge/license-LGPL--2.1--or--later-blue)](LICENSE)
+
+Parallel geometry simplification for **Shapely**, powered by **Rust**.
+Reduce polygon and line vertices, preserve topology, and keep shared polygon
+boundaries aligned. Useful for parcel maps, land-cover polygons, and large vector datasets.
+
+[Documentation](https://isaac.earth/coarsen/) · [API](https://isaac.earth/coarsen/api/) · [Benchmarks](https://isaac.earth/coarsen/performance/) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
+
+## Install
 
 ```sh
 pip install coarsen
 ```
 
+Requires Python ≥3.10, NumPy, and Shapely ≥2.1. The Rust core links neither GEOS
+nor PROJ; the Python interface uses Shapely for geometry conversion. Building from
+source requires Rust ≥1.85 and maturin.
+
+## Simplify shared boundaries
+
+Use `coverage_simplify` for a polygon coverage: polygons with non-overlapping
+interiors and exactly matching shared edges. All input polygons are processed
+together so their simplified boundaries remain aligned.
+
 ```python
 import coarsen
 import shapely
 
-polygons = [shapely.box(0, 0, 10, 10), shapely.box(10, 0, 20, 10)]
-result = coarsen.coverage_simplify(polygons, 5.0, threads=8)  # shapely.coverage_simplify
-lines = coarsen.simplify(polygons, 2.0)  # shapely.simplify
+polygons = [
+    shapely.Polygon([(0, 0), (5, 0), (5.1, 2), (5, 5), (0, 5)]),
+    shapely.Polygon([(5, 0), (10, 0), (10, 5), (5, 5), (5.1, 2)]),
+]
+result = coarsen.coverage_simplify(polygons, 1.0, threads=8)
+
+# Keep the outer coverage boundary unchanged.
+inner_only = coarsen.coverage_simplify(polygons, 1.0, simplify_boundary=False)
 ```
 
-`simplify(geometry, tolerance, preserve_topology=True, *, threads=None, **kwargs)`
-matches `shapely.simplify`: any geometry type, broadcasting, scalar in and scalar out,
-`None` passthrough, and the `out` and `where` ufunc keywords. The default
-topology-preserving mode runs in Rust. `preserve_topology=False` calls
-`shapely.simplify`, because GEOS repairs Douglas-Peucker polygons with `buffer(0)`.
+Tolerance uses coordinate units. Project longitude/latitude data to a suitable
+projected CRS before using a tolerance in metres. Invalid coverages are not repaired;
+check them with `shapely.coverage_is_valid` when validity is uncertain.
 
-`coverage_simplify(geometry, tolerance, *, simplify_boundary=True, threads=None)`
-returns a NumPy object array with the input shape; scalar geometry input returns
-a scalar geometry, matching Shapely. `simplify_boundary=False` implements GEOS
-`simplifyInner`. `threads=None` uses Rayon's default pool; a positive integer
-creates a pool for that call. Rust parses, simplifies, and writes WKB without the GIL.
-Tolerance uses input coordinate units; project longitude/latitude data before
-using a tolerance in metres. Requires Python ≥3.10, NumPy, and Shapely ≥2.1.
+## Simplify individual geometries
 
-The parity target is **GEOS 3.13.1**, bundled in Shapely 2.1.2's reference wheels.
-Tests compare WKB bytes without normalization at one and eight threads, including
-both boundary modes, the original 174 fixtures, real UTM parcels, Voronoi cells,
-grids, holes, MultiPolygons, empty input, zero tolerance, and Z/M coordinates.
-Z/M rebuilding follows GEOS's quirks. Other GEOS versions can produce different
-results. Parity is verified on these cases, not a proof for every floating-point
-input. Nonfinite XY coordinates are rejected. Invalid coverages are not repaired.
-The Rust library retains coverage validation; no Python invalid-edges helper is
-exposed because the port computes an invalid-polygon mask rather than edge geometry.
+```python
+line = shapely.LineString([(0, 0), (1, 0.1), (2, 0)])
+result = coarsen.simplify(line, 0.2)
+assert list(result.coords) == [(0.0, 0.0), (2.0, 0.0)]
+```
 
-`simplify` is tested the same way: WKB bytes against Shapely 2.1.2 on 17,920 seeded
-random geometries of every type and 192 real parcels, at one and eight threads.
+| Function | Use for | Parallel work |
+| --- | --- | --- |
+| `coverage_simplify` | Matching polygon boundaries | Independent groups of shared edges |
+| `simplify` | Individual geometries of any type | Independent geometries |
 
-Coverage simplification, tolerance 5 m, median of three runs:
+`simplify` preserves each geometry's topology by default. It supports broadcasting,
+`None`, and `out`/`where`; it does not preserve shared boundaries between separate
+array elements. `preserve_topology=False` delegates to Shapely. See the
+[API reference](docs/api.md) for compatibility details and threading guidance.
 
-| Tile | Polygons | Shapely (s) | coarsen 1 thread (s) | coarsen 8 threads (s) | Speedup (8) |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| 34UEU_0_0 | 42,858 | 92.03 | 22.74 | 9.65 | 9.5× |
-| 22JBM_0_0 | 33,919 | 94.71 | 21.94 | 8.24 | 11.5× |
-| 48RWV_0_0 | 183,423 | 92.90 | 17.80 | 6.42 | 14.5× |
+## Performance and compatibility
 
-`simplify` (topology-preserving), single run on a shared login node:
+The recorded coverage benchmark processes 260,200 polygons across three projected
+FTW tiles. Eight threads took **6.42–9.65 s per tile**, versus **92.03–94.71 s**
+for Shapely, a **9.5–14.5×** speedup on that workload. These are historical shared-node
+measurements, not a guarantee for other hardware or geometry distributions.
+[Methodology, raw samples, and limitations](docs/performance.md).
 
-| Tile | Polygons | Tolerance | Shapely (s) | coarsen 1 thread (s) | coarsen 8 threads (s) |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| 34UEU_0_0 | 42,858 | 1.2 m | 8.06 | 5.44 | 1.64 |
-| 34UEU_0_0 | 42,858 | 5 m | 7.50 | 3.33 | 1.45 |
-| 22JBM_0_0 | 33,919 | 1.2 m | 9.53 | 5.70 | 1.57 |
-| 22JBM_0_0 | 33,919 | 5 m | 9.68 | 4.10 | 1.22 |
+The algorithms port GEOS **3.13.1**. Tests compare unnormalized WKB bytes against
+Shapely 2.1.2 at one and eight threads using original GEOS fixtures, seeded random
+geometries, and real projected parcels. Parity is established for the tested cases;
+other GEOS versions and untested inputs can differ. Z/M behavior follows the reference
+algorithm and may drop dimensions. Nonfinite coordinates used in indexes are rejected.
 
-Measured timings cover the complete public API, including WKB conversion, at
-5 m in each tile's UTM CRS. See [benchmark details](benchmarks/README.md).
+## Development
 
-LGPL-2.1-or-later. Derived from GEOS work by Martin Davis, Paul Ramsey, and other
-contributors; see [NOTICE](NOTICE) and [LICENSE](LICENSE). Build, test, and release
-instructions are in [CONTRIBUTING.md](CONTRIBUTING.md).
+```sh
+make install
+make check
+make docs-serve
+```
+
+Requires [uv](https://docs.astral.sh/uv/) and [Rust](https://rustup.rs/).
+`make check` runs Rust formatting, Clippy, Rust and Python tests, Ruff, ty, and the
+strict documentation build. Run `make build` after editing Rust.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for release and platform notes.
+
+## License and attribution
+
+[LGPL-2.1-or-later](LICENSE). Derived from GEOS work by Martin Davis, Paul Ramsey,
+and other contributors; see [NOTICE](NOTICE).
