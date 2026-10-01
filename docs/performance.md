@@ -16,7 +16,7 @@ at a 5 m tolerance in each tile's local UTM zone.
 
 Median times across three runs, including geometry conversion and simplification.
 Every result was checked against Shapely's output. Performance varies with hardware
-and geometry; see the [benchmark details](https://github.com/isaaccorley/coarsen/blob/main/benchmarks/README.md)
+and geometry; see the [benchmark details](https://github.com/taylor-geospatial/coarsen/blob/main/benchmarks/README.md)
 for raw results and reproduction instructions.
 
 ## Scaling limits
@@ -30,7 +30,7 @@ other lines in a geometry, which can be costly for large collections.
 Owned WKB, parsed points, indexes, and output buffers coexist during a call.
 Choose thread counts using representative data and peak memory measurements.
 For untrusted geometry, use worker-level CPU/memory limits as described in the
-[security policy](https://github.com/isaaccorley/coarsen/blob/main/SECURITY.md).
+[security policy](https://github.com/taylor-geospatial/coarsen/blob/main/SECURITY.md).
 
 ## Parity tests
 

@@ -1,9 +1,9 @@
 site_name: coarsen
-site_url: https://isaac.earth/coarsen/
+site_url: https://research.taylorgeospatial.org/coarsen/
 site_description: Parallel geometry and polygon coverage simplification for Shapely, powered by Rust. Preserve shared boundaries and reduce vertices with coarsen.
 site_author: Isaac Corley
-repo_url: https://github.com/isaaccorley/coarsen
-repo_name: isaaccorley/coarsen
+repo_url: https://github.com/taylor-geospatial/coarsen
+repo_name: taylor-geospatial/coarsen
 theme:
   name: material
   custom_dir: docs/overrides

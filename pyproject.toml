@@ -26,11 +26,11 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/isaaccorley/coarsen"
-Documentation = "https://isaac.earth/coarsen/"
-Repository = "https://github.com/isaaccorley/coarsen"
-Issues = "https://github.com/isaaccorley/coarsen/issues"
-Changelog = "https://github.com/isaaccorley/coarsen/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/taylor-geospatial/coarsen"
+Documentation = "https://research.taylorgeospatial.org/coarsen/"
+Repository = "https://github.com/taylor-geospatial/coarsen"
+Issues = "https://github.com/taylor-geospatial/coarsen/issues"
+Changelog = "https://github.com/taylor-geospatial/coarsen/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
 docs = ["zensical>=0.0.67,<0.1"]

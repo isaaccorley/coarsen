@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://isaac.earth/coarsen/sitemap.xml
+Sitemap: https://research.taylorgeospatial.org/coarsen/sitemap.xml

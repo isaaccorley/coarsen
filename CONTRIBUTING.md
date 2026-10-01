@@ -51,7 +51,8 @@ musllinux are tested in their build jobs; the sdist is built and tested separate
 
 Before publishing, the owner must configure a
 PyPI project/pending trusted publisher for `coarsen`, specifying that repository,
-workflow `release.yml`, and environment `pypi`. Create the matching GitHub
+owner `taylor-geospatial`, repository `coarsen`, workflow `release.yml`, and
+environment `pypi`. Create the matching GitHub
 `pypi` environment and any desired approval rules. No API token or secret is needed.
 Set matching versions in Cargo.toml, pyproject.toml, and the Python `__version__`;
 inspect the built artifacts and passing CI before creating a release tag.
@@ -93,7 +94,7 @@ native Douglas-Peucker mode would need those GEOS validity and zero-buffer seman
 
 `make docs-serve` previews the minimal Zensical site; `make docs` builds it strictly.
 GitHub Pages needs Actions enabled as its source before the first docs deployment.
-The configured canonical URL is `https://isaac.earth/coarsen/`.
+The configured canonical URL is `https://research.taylorgeospatial.org/coarsen/`.
 See [SECURITY.md](SECURITY.md) for private reporting and resource boundaries.
 
 Release builds disable debug-info stripping to avoid `mis-aligned LINKEDIT string pool`

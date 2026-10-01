@@ -6,7 +6,7 @@ description: Build, test, review, and publish coarsen's Rust core, Python bindin
 Install uv, Rust ≥1.85, and Python ≥3.10. The default local setup uses Python 3.13.
 
 ```sh
-git clone https://github.com/isaaccorley/coarsen.git
+git clone https://github.com/taylor-geospatial/coarsen.git
 cd coarsen
 make install
 make check
@@ -36,7 +36,7 @@ performance change against the reference before claiming a speedup.
 
 The site includes page descriptions, canonical URLs, a sitemap, robots.txt, and
 Open Graph metadata. Package metadata supplies repository and documentation URLs.
-The configured public URL is `https://isaac.earth/coarsen/`.
+The configured public URL is `https://research.taylorgeospatial.org/coarsen/`.
 
 The docs workflow builds on pull requests and deploys only from `main` or a manual
 run on `main`. The repository owner must enable GitHub Pages with GitHub Actions
@@ -46,5 +46,5 @@ as its source before the first deployment. If adopting a custom domain, update
 Useful GitHub topics are `geospatial`, `gis`, `shapely`, `polygon`, `simplification`,
 `topology`, `rust`, and `python`. These are repository settings, separate from files.
 
-See [CONTRIBUTING.md](https://github.com/isaaccorley/coarsen/blob/main/CONTRIBUTING.md)
+See [CONTRIBUTING.md](https://github.com/taylor-geospatial/coarsen/blob/main/CONTRIBUTING.md)
 for the full release checklist, licensing, and platform troubleshooting.

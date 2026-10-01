@@ -56,7 +56,7 @@ Use the [API notes](api.md) for array and metadata behavior, and
 The Rust core does not link GEOS or PROJ. The Python interface still uses Shapely
 and its GEOS dependency for geometry conversion and non-topology-preserving simplification.
 
-[Source code](https://github.com/isaaccorley/coarsen) ·
+[Source code](https://github.com/taylor-geospatial/coarsen) ·
 [PyPI](https://pypi.org/project/coarsen/) ·
-[Security policy](https://github.com/isaaccorley/coarsen/blob/main/SECURITY.md) ·
-[LGPL-2.1-or-later](https://github.com/isaaccorley/coarsen/blob/main/LICENSE)
+[Security policy](https://github.com/taylor-geospatial/coarsen/blob/main/SECURITY.md) ·
+[LGPL-2.1-or-later](https://github.com/taylor-geospatial/coarsen/blob/main/LICENSE)

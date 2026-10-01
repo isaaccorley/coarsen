@@ -1,8 +1,8 @@
 # coarsen
 
-<img src="https://raw.githubusercontent.com/isaaccorley/coarsen/main/docs/assets/logo.png" alt="coarsen — detailed polygon boundaries reduced to clean edges" width="600">
+<img src="https://raw.githubusercontent.com/taylor-geospatial/coarsen/main/docs/assets/logo.png" alt="coarsen — detailed polygon boundaries reduced to clean edges" width="600">
 
-[![CI](https://github.com/isaaccorley/coarsen/actions/workflows/ci.yml/badge.svg)](https://github.com/isaaccorley/coarsen/actions/workflows/ci.yml)
+[![CI](https://github.com/taylor-geospatial/coarsen/actions/workflows/ci.yml/badge.svg)](https://github.com/taylor-geospatial/coarsen/actions/workflows/ci.yml)
 [![PyPI](https://img.shields.io/pypi/v/coarsen)](https://pypi.org/project/coarsen/)
 [![Python](https://img.shields.io/pypi/pyversions/coarsen)](https://pypi.org/project/coarsen/)
 [![License: LGPL-2.1-or-later](https://img.shields.io/badge/license-LGPL--2.1--or--later-blue)](LICENSE)
@@ -11,7 +11,7 @@ Parallel geometry simplification for **Shapely**, powered by **Rust**.
 Reduce polygon and line vertices, preserve topology, and keep shared polygon
 boundaries aligned. Useful for parcel maps, land-cover polygons, and large vector datasets.
 
-[Documentation](https://isaac.earth/coarsen/) · [API](https://isaac.earth/coarsen/api/) · [Benchmarks](https://isaac.earth/coarsen/performance/) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
+[Documentation](https://research.taylorgeospatial.org/coarsen/) · [API](https://research.taylorgeospatial.org/coarsen/api/) · [Benchmarks](https://research.taylorgeospatial.org/coarsen/performance/) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
 
 ## Install
 
